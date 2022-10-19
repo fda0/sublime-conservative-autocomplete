@@ -15,7 +15,7 @@ last_index = 0
 history = defaultdict(dict)  # type: Dict[sublime.Window, Dict[str, str]]
 
 
-class HippieWordCompletionCommand(sublime_plugin.TextCommand):
+class ConservativeWordCompletionCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global last_view, matching, last_index, initial_primer
         window = self.view.window()
@@ -54,7 +54,7 @@ class HippieWordCompletionCommand(sublime_plugin.TextCommand):
         history[window][initial_primer] = matching[last_index]
 
 
-class HippieListener(sublime_plugin.EventListener):
+class ConservativeListener(sublime_plugin.EventListener):
     def on_init(self, views):
         for view in views:
             index_view(view)
@@ -104,7 +104,7 @@ def fuzzyfind(primer, coll):
         primer: A partial string which is typically entered by a user.
         coll: A collection of strings which will be filtered based on the `primer`.
     """
-    primer_lower = primer.lower()
+    primer_lower = primer
     suggestions = [(score, item) for item in coll if (score := fuzzy_score(primer_lower, item))]
     return [z[-1] for z in sorted(suggestions, key=lambda x: x[0])]
 
@@ -118,7 +118,7 @@ def fuzzy_score(primer, item, _abbr={}):
 
 def _fuzzy_score(primer, item):
     start, pos, prev, score = -1, -1, 0, 1
-    item_l = item.lower()
+    item_l = item
     for c in primer:
         pos = item_l.find(c, pos + 1)
         if pos == -1:
@@ -134,7 +134,7 @@ def _fuzzy_score(primer, item):
 def make_abbr(item):
     abbr = item[0]
     for c, nc in zip(item, item[1:]):
-        if c in "_-" or c.isupper() < nc.isupper():
+        if c.isupper() < nc.isupper():
             abbr += nc
     if len(abbr) > 1:
         return abbr

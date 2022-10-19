@@ -1,5 +1,5 @@
 [
-    { "keys": ["tab"], "command": "hippie_word_completion", "context": [
+    { "keys": ["tab"], "command": "conservative_word_completion", "context": [
         { "key": "read_only", "operator": "not_equal" },
         { "key": "auto_complete_visible", "operand": false },
         { "key": "has_snippet", "operand": false  },
